@@ -1,0 +1,15 @@
+# BoT-SORT with appearance re-identification: keeps the same ID when an object is
+# hidden for a moment (behind a pole, tree or another vehicle).
+# Docs: https://docs.ultralytics.com/modes/track
+tracker_type: botsort
+track_high_thresh: 0.2    # first-stage match threshold
+track_low_thresh: 0.1     # second-stage threshold for low-score detections
+new_track_thresh: 0.2     # minimum score to start a new track (low enough for bicycles)
+track_buffer: 90          # frames a lost track is kept alive (~3 s at 30 fps)
+match_thresh: 0.8         # association threshold
+fuse_score: true
+gmc_method: none          # fixed camera: no camera-motion compensation needed
+proximity_thresh: 0.5     # min IoU to consider appearance matching
+appearance_thresh: 0.8    # min appearance similarity to re-link a lost track
+with_reid: true           # use appearance to re-identify objects after occlusion
+model: auto               # reuse the detector's own features (no extra model)

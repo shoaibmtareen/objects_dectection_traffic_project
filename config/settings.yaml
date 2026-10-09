@@ -1,0 +1,79 @@
+# ---------- Appearance ----------
+ui:
+  # traffic_pro (charcoal & blue, light) | graphite (neutral dark & blue) | smart_city (charcoal & green, light)
+  theme: traffic_pro
+
+# ---------- Model ----------
+model:
+  weights: models/yolo11s.pt   # yolo11s = good accuracy (default), yolo11n = fastest but misses bicycles
+  device: cpu                  # "cpu" or "0" for first CUDA GPU
+  imgsz: 960                   # inference size: 640 fast, 960 default, 1280 best for distant objects
+  conf: 0.30                   # minimum confidence
+  class_conf:                  # lower thresholds for classes the model finds harder
+    Bicycle: 0.10
+    Motorcycle: 0.20
+  iou: 0.5                     # NMS IoU threshold
+
+# ---------- Detected classes (COCO id -> display name) ----------
+classes:
+  0: Person
+  1: Bicycle
+  2: Car
+  3: Motorcycle
+  5: Bus
+  7: Truck
+
+# ---------- Colors per class (hex RGB, used by UI + annotations) ----------
+# Validated on the dark panel colour (#111C33) for lightness, contrast and
+# colour-blind separation between neighbours; keep the order if you edit.
+colors:
+  Car: "#2F7FF0"
+  Truck: "#0FA97A"
+  Bus: "#CF7A06"
+  Motorcycle: "#E8436A"
+  Rickshaw: "#6E9E12"          # not a YOLO class: assigned by the crop classifier
+  Bicycle: "#8B5CF6"
+  Person: "#0899B5"
+
+# ---------- Second-stage classifier ----------
+# CLIP checks each vehicle's best crop: recognises auto/cycle rickshaws (not in YOLO's
+# COCO classes) and fixes car / truck / bus mix-ups. ~130 ms per check on CPU.
+classifier:
+  enabled: true
+  model: ViT-B/32
+  model_dir: models/clip
+  max_checks: 3        # checks per vehicle (first at registration, then on better views)
+  per_frame: 2         # at most this many checks per processed frame
+  min_prob: 0.6        # average CLIP probability needed to override YOLO's label
+
+# ---------- Tracking ----------
+tracking:
+  tracker_config: config/botsort.yaml   # BoT-SORT + appearance re-ID (bytetrack.yaml = lighter)
+  min_hits: 5                  # frames a track must exist before it is registered
+  trail_length: 30             # points kept for drawing motion trails
+  hold_seconds: 0.4            # keep showing an object this long after a missed detection
+
+# ---------- Counting ----------
+counting:
+  # line endpoints as fractions of frame width/height (0..1); editable in the UI
+  line_start: [0.0, 0.6]
+  line_end: [1.0, 0.6]
+  # counted and listed, but kept out of the "vehicles" total
+  non_vehicle_classes: [Person]
+  # the counting line measures traffic flow (IN / OUT); hidden unless switched on in the app
+  show_line: false
+
+# ---------- Processing ----------
+processing:
+  max_width: 1280              # frames wider than this are downscaled before processing
+
+# ---------- Video ----------
+video:
+  default_source: data/videos/vehicles.mp4
+
+# ---------- Storage ----------
+storage:
+  database: data/vehicles.db
+  snapshots_dir: data/snapshots
+  exports_dir: data/exports
+  recordings_dir: data/recordings

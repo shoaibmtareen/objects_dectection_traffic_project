@@ -1,0 +1,9 @@
+# ByteTrack settings used by the Ultralytics tracker
+# Docs: https://docs.ultralytics.com/modes/track
+tracker_type: bytetrack
+track_high_thresh: 0.2    # first-stage match threshold
+track_low_thresh: 0.1     # second-stage threshold for low-score detections
+new_track_thresh: 0.2     # minimum score to start a new track (low enough for bicycles)
+track_buffer: 45          # frames a lost track is kept alive (handles short occlusions)
+match_thresh: 0.8         # IoU association threshold
+fuse_score: true

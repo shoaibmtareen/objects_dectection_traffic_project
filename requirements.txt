@@ -1,0 +1,15 @@
+# Install CPU PyTorch first (smaller download):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+ultralytics
+supervision
+opencv-python
+PySide6
+pandas
+openpyxl
+pyyaml
+numpy
+lap
+# second-stage classifier (recognises rickshaws); needs git installed
+ftfy
+regex
+clip @ git+https://github.com/ultralytics/CLIP.git

@@ -1,0 +1,20 @@
+# Environment
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Model weights (large; download separately)
+models/
+*.pt
+
+# Videos and generated data
+*.mp4
+data/videos/
+data/snapshots/
+test_data/
+
+# Runtime DB / logs
+*.db
+*.sqlite
+*.log
